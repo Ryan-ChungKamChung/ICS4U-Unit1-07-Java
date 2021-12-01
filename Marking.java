@@ -8,23 +8,20 @@
 */
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
 * This is the marks program.
 */
-final class Marks {
+final class Marking {
 
     /**
     * Prevent instantiation
@@ -34,25 +31,26 @@ final class Marks {
     * @throws IllegalStateException
     *
     */
-    private Marks() {
+    private Marking() {
         throw new IllegalStateException("Cannot be instantiated");
     }
 
     /**
-    * The generateMarks() function.
+    * The generateTable() function.
     *
-    * @param arrayOfStudents the collection of students
-    * @param arrayOfAssignments the collection of assignments
+    * @param students the array of students
+    * @param assignments the array of assignments
     * @return the generated marks
     */
     public static String[][] generateTable(
             final String[] students, final String[] assignments) {
 
-        int numStudents = students.length;
-        int numAssignments = assignments.length;
-        Random random = new Random();
+        final int numStudents = students.length;
+        final int numAssignments = assignments.length;
+        final Random random = new Random();
 
-        String[][] markArray = new String[numStudents][numAssignments + 1];
+        final String[][] markArray =
+            new String[numStudents][numAssignments + 1];
 
         for (int loop1 = 0; loop1 < numStudents; loop1++) {
 
@@ -76,13 +74,19 @@ final class Marks {
     * @param args No args will be used
     */
     public static void main(final String[] args) {
+
+        final String frontSquareBrace = "[";
+        final String backSquareBrace = "]";
+        final String sameDirectory = "./";
+        final String newLine = "\n";
+
         final ArrayList<String> listOfStudents = new ArrayList<String>();
         final ArrayList<String> listOfAssignments = new ArrayList<String>();
         final String[] arrayOfStudents;
         final String[] arrayOfAssignments;
 
-        final Path studentFilePath = Paths.get("./", args[0]);
-        final Path assignmentFilePath = Paths.get("./", args[1]);
+        final Path studentFilePath = Paths.get(sameDirectory, args[0]);
+        final Path assignmentFilePath = Paths.get(sameDirectory, args[1]);
         final Charset charset = Charset.forName("UTF-8");
 
         try (BufferedReader readerStudent = Files.newBufferedReader(
@@ -111,21 +115,18 @@ final class Marks {
         final String[][] marksArray = generateTable(
                 arrayOfStudents, arrayOfAssignments);
 
-        System.out.println(Arrays.deepToString(marksArray)
-                .replace("], ", "\n")
-                .replace("[", "")
-                .replace("]", ""));
-
         try {
 
-            FileWriter writer = new FileWriter("./marks.csv");
+            final FileWriter writer = new FileWriter("./marks.csv");
+
+            writer.append(", " + Arrays.toString(arrayOfAssignments)
+                    .replace(frontSquareBrace, "")
+                    .replace(backSquareBrace, "") + newLine);
 
             for (String[] array : marksArray) {
                 writer.append(Arrays.deepToString(array)
-                        .replace("[", "")
-                        .replace("]", ""));
-
-                writer.append("\n");
+                        .replace(frontSquareBrace, "")
+                        .replace(backSquareBrace, "") + newLine);
             }
 
             writer.close();
