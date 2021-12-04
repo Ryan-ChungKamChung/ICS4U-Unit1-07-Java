@@ -52,16 +52,16 @@ final class Marking {
         final String[][] markArray =
             new String[numStudents][numAssignments + 1];
 
-        for (int loop1 = 0; loop1 < numStudents; loop1++) {
+        for (int column = 0; column < numStudents; column++) {
 
-            markArray[loop1][0] = students[loop1];
+            markArray[column][0] = students[column];
 
-            for (int loop2 = 0; loop2 < numAssignments; loop2++) {
+            for (int row = 0; row < numAssignments; row++) {
 
                 final int mark = (int) Math.floor(
                         random.nextGaussian() * 10 + 75);
 
-                markArray[loop1][loop2 + 1] = String.valueOf(mark);
+                markArray[column][row + 1] = String.valueOf(mark);
             }
         }
 
